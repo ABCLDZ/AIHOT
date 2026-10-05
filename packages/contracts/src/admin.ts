@@ -20,6 +20,48 @@ export interface AdminMe {
   dev: boolean;
 }
 
+export interface AdminRadarAssessment {
+  input_scope?: { kind: 'title_only' | 'title+rss_excerpt' | 'title+excerpt' | 'title+body_excerpt' | 'title+both'; excerpt_chars: number; body_excerpt_chars: number };
+  title_zh: string | null;
+  status: 'lead' | 'review' | 'noise';
+  lane: string;
+  reason: string;
+  change: string;
+  angle: string;
+  value: string;
+  evidence: string[];
+  stage: '已发生' | '计划或提案' | '预测' | '未知';
+  event_key: string | null;
+  event_date: string | null;
+  expected_question: string;
+  expected_answer: string;
+  incremental_value: string;
+  boundary: string;
+  repeat_risk: '待判断' | '可能重复' | '有新增线索';
+  previous_ids: string[];
+  repeat_reason: string;
+  exclude_reason: string | null;
+}
+export interface AdminRadarRun {
+  id: string;
+  state: 'pending' | 'running' | 'completed' | 'partial' | 'failed';
+  stage: string;
+  started_at: Timestamp;
+  updated_at: Timestamp;
+  finished_at: Timestamp | null;
+  error: string | null;
+  detail: {
+    mode?: 'collect_only';
+    sources?: Array<{ sourceId: string; name: string; status: string; created: number; revised: number; error?: string }>;
+    modelDone?: number;
+    modelFailed?: number;
+    modelTotal?: number;
+    pending?: number;
+    modelErrors?: Array<{ articleId: string; error: string }>;
+    context?: { status: 'loaded' | 'missing'; hash: string; readAt: string; files: Array<{path:string;hash:string}>; missing: string[]; recentIds: string[] };
+  };
+}
+
 /** Items waiting for the admin, shown on the navigation. */
 export type AdminNavCounts = Partial<Record<"feedback" | "sources" | "runs" | "monitor", number>>;
 
@@ -102,7 +144,7 @@ export interface AdminSourceDetail {
     id: number; started_at: Timestamp; finished_at: Timestamp | null; status: string; found_count: number | null; new_count: number | null; error: string | null;
     detail: { pages?: number; backlog?: number; dropped?: number } | null;
   }>;
-  items: Array<{ id: string; title: string; url: string; discovered_at: Timestamp; published_at: Timestamp | null; processing_state: string; selected: boolean | null; visibility: string | null; title_zh: string | null }>;
+  items: Array<{ id: string; title: string; url: string; discovered_at: Timestamp; published_at: Timestamp | null; processing_state: string; selected: boolean | null; visibility: string | null; title_zh: string | null; title_translation: string | null; revision: number; excerpt: string | null; model_assessment: AdminRadarAssessment | null; model_meta: {model:string;prompt_version:string;created_at:Timestamp;context_hash:string} | null }>;
   stats: { total: number; last7d: number; selected: number };
   history: AdminAuditEntry[];
   /** Progress of the re-derivation queued after the last change of licences, tier or participation. */

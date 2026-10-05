@@ -14,6 +14,7 @@ import { fetchRss } from "../sources/rss.ts";
 import { assertSupportedConfig } from "../sources/config-keys.ts";
 import type { SourceRow } from "../sources/types.ts";
 import { fetchWebList } from "../sources/web-list.ts";
+import { RADAR_SCREEN_VERSION } from '../editorial/radar-screen.ts';
 import { fetchXSearch } from "../sources/x.ts";
 
 
@@ -58,8 +59,13 @@ export async function sourceDetail(id: string): Promise<BeforeJson<AdminSourceDe
   if (!source) return null;
   const runs = await sql<BeforeJson<AdminSourceDetail["runs"][number]>[]>`SELECT id, started_at, finished_at, status, found_count, new_count, error, detail FROM fetch_runs WHERE source_id = ${id} ORDER BY started_at DESC LIMIT 30`;
   const items = await sql<BeforeJson<AdminSourceDetail["items"][number]>[]>`
-    SELECT a.id, a.title, a.url, a.discovered_at, a.published_at, a.processing_state, p.selected, p.visibility, p.title AS title_zh
-    FROM articles a LEFT JOIN publications p ON p.article_id = a.id WHERE a.source_id = ${id} ORDER BY a.discovered_at DESC LIMIT 30`;
+    SELECT a.id, a.title, a.url, a.discovered_at, a.published_at, a.processing_state, p.selected, p.visibility, p.title AS title_zh,
+           t.translated_title AS title_translation,a.revision,a.excerpt,r.output AS model_assessment,
+           CASE WHEN r.article_id IS NULL THEN NULL ELSE jsonb_build_object('model',r.model,'prompt_version',r.prompt_version,'created_at',r.created_at,'context_hash',r.context_hash) END AS model_meta
+    FROM articles a LEFT JOIN publications p ON p.article_id = a.id
+    LEFT JOIN article_title_translations t ON t.article_id = a.id AND t.revision = a.revision AND t.original_title = a.title
+    LEFT JOIN LATERAL (SELECT * FROM article_radar_assessments r WHERE r.article_id=a.id AND r.revision=a.revision AND r.original_title=a.title AND r.prompt_version=${RADAR_SCREEN_VERSION} ORDER BY r.created_at DESC LIMIT 1) r ON true
+    WHERE a.source_id = ${id} ORDER BY CASE WHEN a.source_id LIKE 'media-%' THEN coalesce(a.published_at,a.discovered_at) ELSE a.discovered_at END DESC,a.discovered_at DESC LIMIT 30`;
   const [stats] = await sql<AdminSourceDetail["stats"][]>`
     SELECT count(*)::int AS total, count(*) FILTER (WHERE a.discovered_at > now() - interval '7 days')::int AS last7d,
            (SELECT count(*)::int FROM publications p WHERE p.source_id = ${id} AND p.selected) AS selected

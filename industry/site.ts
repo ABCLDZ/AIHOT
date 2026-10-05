@@ -4,18 +4,18 @@
 
 export const SITE = {
   /** 站名：导航、页面标题、分享图、RSS、MCP、后台都用它。 */
-  name: "MyHOT",
+  name: "选题雷达",
   /**
    * 行业词：拼进默认说法里，比如“AI 日报”“AI 动态”。
    * 改成“法律”“HR”“黄金”之类，页面上就会变成“法律日报”“法律动态”。
    */
-  subject: "AI",
+  subject: "产业观察",
   /** 首页的完整标题（浏览器标签、搜索结果）。 */
-  homeTitle: "MyHOT — AI 行业动态 · 每日精选与日报",
+  homeTitle: "选题雷达 · 公众号选题工作台",
   /** 一句话介绍：搜索引擎、分享卡片、RSS、llms.txt 会用。 */
-  description: "自动盯住上百个信源，用模型摘要、打分、精选，把同一件事的多篇报道归到一起，每天早上出一份日报。",
+  description: "从一手信源寻找科技、商业与地缘变化，核对证据，留下值得写的公众号选题。",
   /** 首页左上角和侧边栏下面的一行小字。 */
-  tagline: "值得关注的 AI 动态",
+  tagline: "从真实变化，到值得写的选题",
   /** 界面语言（HTML lang、og:locale）。 */
   locale: "zh-CN",
   /** 默认域名，只在没设置 SITE_URL 时使用。 */
@@ -28,12 +28,12 @@ export const SITE = {
   /** 对外联系邮箱（选填）：使用规则、llms.txt、响应头里会写。 */
   contactEmail: null as string | null,
   /** 页脚的一行小字（选填）。 */
-  footerNote: "由 AIHOT 开源框架驱动",
+  footerNote: "先核对证据，再决定写什么",
   /** 中国大陆网站的 ICP 备案号（选填），填了就显示在页脚并链接到工信部备案系统。 */
   icp: null as string | null,
   /** 结构化数据里的网站运营者（搜索引擎用）。 */
   organization: {
-    name: "MyHOT",
+    name: "选题雷达",
     /** 创始人（选填）：{ name, url, description }。 */
     founder: null as null | { name: string; url?: string; description?: string },
   },
@@ -45,15 +45,15 @@ export const SITE = {
 export const ABOUT = {
   kicker: `关于 ${SITE.name}`,
   /** 大标题：第一行正常颜色，第二行强调色。 */
-  headline: ["AI 圈每天都有新动静，", "值得看的，只有几条。"] as [string, string],
+  headline: ["世界每天都有新变化，", "找到值得解释的那几件。"] as [string, string],
   /** 标题下面的一段话。{sources} 会换成实时的信源数。 */
-  lead: `${SITE.name} 替你盯着 {sources} 个信源：抓取、归并、打分、精选，每天早上 8 点出一份日报。免费，不用注册。`,
+  lead: `${SITE.name} 汇集 {sources} 个信源的材料，辅助公众号选题。重点观察中国产业能力在全球市场中的位置变化，以及技术进入真实工作和生活的方式。`,
   /** 信源河动画下面的四个环节。 */
   steps: {
-    collect: "官方博客、媒体、X 账号、公众号和各类订阅源都在看；活跃的源 15 分钟就看一次。",
-    store: "抓到的都存下来，同一件事的报道归到一起；只计入热度的账号也算在内，热点榜就是从这里算出来的。",
-    select: "模型先看是不是这个行业的事、有没有实际信息，再写中文标题、摘要和推荐理由；营销稿和重复转发进不来。",
-    publish: "每天 08:00 出日报，周一出周报，每月 1 日出月报；最精选的几条可以推到飞书群。",
+    collect: "从官方公告、技术文章、产业数据与贸易规则寻找具体主体和真实动作。",
+    store: "保留原文链接、来源与时间；先区分材料、观点和可核验事实。",
+    select: "判断近期变化、读者价值、证据和完成成本，每天留下 3–5 个候选。",
+    publish: "选定后进入文章工作流，由你确认选题、定稿与发布。",
   },
   /**
    * 作者块（选填），null 就不显示。

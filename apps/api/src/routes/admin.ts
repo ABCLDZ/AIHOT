@@ -14,6 +14,7 @@ import { requeueFailedArticles, runsOverview } from "@aihot/backend/admin/runs";
 import { replaceContactQr, setTargetEnabled, settingsOverview, updateBudget } from "@aihot/backend/admin/settings";
 import { createSource, fetchNow, listSources, previewSource, previewStoredSource, sourceDetail, updateSource } from "@aihot/backend/admin/sources";
 import { navCounts } from "@aihot/backend/admin/navigation";
+import { latestRadarRun, requestRadarUpdate } from "@aihot/backend/admin/radar";
 import { listAudit } from "@aihot/backend/audit";
 import { detachFromFact, mergeStories } from "@aihot/backend/events/corrections";
 import { releaseReceipt } from "@aihot/backend/operations/recover";
@@ -36,6 +37,8 @@ function decodeImage(dataUrl: unknown): Buffer {
 }
 
 export function registerAdmin(app: FastifyInstance) {
+  app.get('/api/admin/radar/update',adminHandler(async () => ({run:await latestRadarRun()})));
+  app.post('/api/admin/radar/update',adminHandler(async (req,_reply,admin) => ({run:await requestRadarUpdate(actorOf(admin),String(req.headers['idempotency-key'] ?? ''))})));
   // Sources (F18)
   app.get("/api/admin/sources", adminHandler(async (req) => {
     const f = q(req);

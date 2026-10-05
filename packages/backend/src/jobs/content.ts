@@ -8,6 +8,7 @@ import { CAPABILITIES } from "../editorial/models.ts";
 import { sql, type Db } from "../db.ts";
 import { extractArticleBody, pageFetchable } from "../content/extract.ts";
 import { analyzeArticle, AnalysisInterruptedError } from "../editorial/analyze.ts";
+import { translateMediaTitle } from "../editorial/translate-title.ts";
 import { isHistorical } from "../content/materials.ts";
 import { publishArticle } from "../publication/publish.ts";
 import { BudgetExceededError, ProviderRejectedError, ReceiptBusyError, ReceiptUnknownError } from "../providers/receipts.ts";
@@ -137,6 +138,7 @@ async function processRevision(articleId: string, row: NonNullable<Awaited<Retur
     return { state: "skipped" };
   }
   try {
+    await translateMediaTitle(articleId, opts.attemptTag);
     const result = await analyzeArticle(articleId, { attemptTag: opts.attemptTag });
     if (!result) return { state: "missing" };
     // Only a title or a feed summary: the article page first; extraction queues the analysis again.

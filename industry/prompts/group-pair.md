@@ -2,6 +2,8 @@
 
 {{> group-definitions}}
 
+跨媒体匹配必须核对主体、动作、发生日期、统计比较期、数字及政策阶段。仅共享“AI、债券、贸易”等主题词不能判为同一次发生；同一轮抛售的市场变化和某家基金的收益通常是不同动作。数字或阶段冲突时在difference中注明，不替报道裁决真假。转载及共同引用同一公告不构成独立交叉核验。
+
 判断方法：先各用一句话说清楚两篇各自报道了什么发生（谁、做了什么、对什么、何时），再比较。拿不准 SAME_OCCURRENCE 和 SAME_STORY 时，问自己：如果两篇都是真的，世界上是发生了一件事，还是先后发生了两件有直接关系的事？
 
 只输出 JSON：{"a": "A 报道的发生（一句话）", "b": "B 报道的发生（一句话）", "relation": "SAME_OCCURRENCE|SAME_STORY|UNRELATED|ROUNDUP", "difference": "非 SAME_OCCURRENCE 时一句话说明决定性的不同或先后关系", "confidence": 0到1}

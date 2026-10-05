@@ -9,7 +9,7 @@ import http from "node:http";
 import { after, test } from "node:test";
 import { config } from "@aihot/backend/config";
 import { sanitizeBody, trimTrailingChrome } from "@aihot/backend/content/sanitize";
-import { fetchDetail, fetchWebList, fromHtml, fromMarkdown } from "@aihot/backend/sources/web-list";
+import { fetchDetail, fetchWebList, fromHtml, fromMarkdown, parseLooseDate, fromPeopleDaily } from "@aihot/backend/sources/web-list";
 import { fetchRss } from "@aihot/backend/sources/rss";
 import { fetchJsonList } from "@aihot/backend/sources/json-list";
 import { noiseFiltered } from "@aihot/backend/sources/collect";
@@ -21,6 +21,9 @@ const source = (config: Record<string, unknown>) => ({ id: "test-list", config }
 // map, the route table naming the homepage's chunks, and the chunk with the Blog list among the menu,
 // the model cards, the other sections and a Paper list built at run time.
 const pages: Record<string, (cdn: string) => string> = {
+  '/layout/202610/03/node_01.html': () => '<a href="../../../content/202610/03/content_01.html">新闻第一篇</a><a href="../../../content/202610/03/content_01.html">新闻第一篇</a><a href="/navigation">报纸导航</a>',
+  '/layout/202610/03/node_02.html': () => '<a href="../../../content/202610/03/content_02.html">新闻第二篇</a>',
+  '/layout/202610/03/node_03.html': () => '<a href="../../../content/202610/03/content_03.html">新闻第三篇</a>',
   "/": (cdn) =>
     `<html><head><script defer src="${cdn}static/js/lib-react.a6be410a.js"></script><script defer src="${cdn}static/js/4752.2908c99e.js"></script>` +
     `<script defer src="${cdn}static/js/index.c5195ace.js"></script></head><body><a href="/zh/index">简体中文</a><a href="/mimocode">MiMo Code</a>` +
@@ -76,6 +79,19 @@ await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", () => resolve
 const site = `http://127.0.0.1:${(server.address() as { port: number }).port}`;
 config.allowPrivateNetworkFetch = true;
 after(() => new Promise<void>((resolve) => server.close(() => resolve())));
+
+test('publisher compact calendar dates reject impossible days', () => {
+  assert.equal(parseLooseDate('20261003')?.toISOString(), '2026-10-03T00:00:00.000Z');
+  assert.equal(parseLooseDate('20260230'), null);
+});
+
+test('People Daily follows at most three issue pages and keeps dated article links', async () => {
+  const index = [1, 1, 2, 3, 4].map(i => `<a href="/layout/202610/03/node_0${i}.html">版面${i}</a>`).join('');
+  const out = await fromPeopleDaily(index, site, source({ allowUrlPrefixes: [`${site}/content/`] }));
+  assert.deepEqual(out.map(c => c.title), ['新闻第一篇', '新闻第二篇', '新闻第三篇']);
+  assert.ok(out.every(c => c.publishedAt?.toISOString() === '2026-10-03T00:00:00.000Z'));
+  await assert.rejects(fromPeopleDaily('<a href="/archive">往期</a>', site, source({})), /current issue pages not found/);
+});
 
 test("Jina card links become posts with their own titles", () => {
   const md = [

@@ -5,7 +5,7 @@ name: Check
 
 on:
   push:
-    branches: [main]
+    branches: [main, wechat-radar]
   pull_request:
   workflow_dispatch:
 

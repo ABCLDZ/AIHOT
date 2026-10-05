@@ -1,388 +1,261 @@
 {
-  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里增删改。字段说明见 docs/customize.md。",
+  "$comment": "个人选题雷达的10家媒体配置；代理通过本机环境配置。各源状态以后台记录为准。每源首次最多8条，正文不公开展示。",
   "sources": [
     {
-      "id": "rss-openai-news",
-      "name": "OpenAI News",
-      "kind": "rss",
+      "id": "media-ap",
+      "name": "美联社 · 商业",
+      "kind": "web_list",
       "config": {
-        "feedUrl": "https://openai.com/news/rss.xml",
+        "url": "https://apnews.com/hub/business",
+        "parseMode": "html",
+        "itemSelector": "a[href*=\"/article/\"]",
+        "allowUrlPrefixes": [
+          "https://apnews.com/article/"
+        ],
         "_aihot": {
           "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "openai",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-deepmind",
-      "name": "Google DeepMind",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://deepmind.google/blog/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-research",
-      "name": "Google Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://research.google/blog/rss/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-hugging-face",
-      "name": "Hugging Face Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://huggingface.co/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "hugging-face",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "开源"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-microsoft-research",
-      "name": "Microsoft Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.microsoft.com/en-us/research/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "microsoft",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-nvidia-blog",
-      "name": "NVIDIA Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://blogs.nvidia.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": "nvidia",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-aws-ml",
-      "name": "AWS Machine Learning Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "教程"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-github-ai",
-      "name": "GitHub Blog · AI & ML",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://github.blog/ai-and-ml/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mistral",
-      "name": "Mistral AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://mistral.ai/rss.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-bair",
-      "name": "Berkeley AI Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://bair.berkeley.edu/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "first_party": true,
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-the-verge-ai",
-      "name": "The Verge · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 60,
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false,
       "tags": [
         "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      ]
     },
     {
-      "id": "rss-techcrunch-ai",
-      "name": "TechCrunch · AI",
+      "id": "media-ft",
+      "name": "金融时报 · 国际",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+        "feedUrl": "https://www.ft.com/rss/home/international",
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 60,
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
       "tags": [
         "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      ]
     },
     {
-      "id": "rss-ars-technica-ai",
-      "name": "Ars Technica · AI",
+      "id": "media-guardian",
+      "name": "卫报 · 商业",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://arstechnica.com/ai/feed/",
+        "feedUrl": "https://www.theguardian.com/business/rss",
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 60,
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
       "tags": [
         "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      ]
     },
     {
-      "id": "rss-mit-tech-review-ai",
-      "name": "MIT Technology Review · AI",
+      "id": "media-bloomberg",
+      "name": "彭博 · 经济",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+        "feedUrl": "https://feeds.bloomberg.com/economics/news.rss",
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
       "tags": [
         "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      ]
     },
     {
-      "id": "rss-the-decoder",
-      "name": "The Decoder",
-      "kind": "rss",
+      "id": "media-zaobao",
+      "name": "联合早报 · 中国财经",
+      "kind": "web_list",
       "config": {
-        "feedUrl": "https://the-decoder.com/feed/",
+        "url": "https://www.zaobao.com/finance/china",
+        "parseMode": "html",
+        "itemSelector": "a.article-link[href*=\"/story\"]",
+        "publishedAtRegex": "story([0-9]{8})-",
+        "allowUrlPrefixes": [
+          "https://www.zaobao.com/finance/china/story"
+        ],
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 60,
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
       "tags": [
         "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
+      ]
     },
     {
-      "id": "rss-simon-willison",
-      "name": "Simon Willison",
-      "kind": "rss",
+      "id": "media-xinhua",
+      "name": "新华社 · 经济科技与国际",
+      "kind": "web_list",
       "config": {
-        "feedUrl": "https://simonwillison.net/atom/everything/",
+        "url": "https://www.news.cn/",
+        "parseMode": "html",
+        "itemSelector": "a[href$=\"/c.html\"]",
+        "publishedAtRegex": "/([0-9]{8})/",
+        "allowUrlPrefixes": [
+          "https://www.news.cn/fortune/",
+          "https://www.news.cn/finance/",
+          "https://www.news.cn/tech/",
+          "https://www.news.cn/world/"
+        ],
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "个人"
-      ],
+      "interval_minutes": 90,
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": true,
+      "tags": [
+        "媒体"
+      ]
     },
     {
-      "id": "rss-import-ai",
-      "name": "Import AI",
-      "kind": "rss",
+      "id": "media-people",
+      "name": "人民日报 · 当期要闻",
+      "kind": "web_list",
       "config": {
-        "feedUrl": "https://importai.substack.com/feed",
+        "url": "https://paper.people.com.cn/rmrb/pc/layout/index.html",
+        "adapter": "people_daily",
+        "allowUrlPrefixes": [
+          "https://paper.people.com.cn/rmrb/pc/content/"
+        ],
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "个人",
-        "周刊"
-      ],
+      "interval_minutes": 90,
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": true,
+      "tags": [
+        "媒体"
+      ]
     },
     {
-      "id": "rss-latent-space",
-      "name": "Latent Space",
-      "kind": "rss",
+      "id": "media-phoenix",
+      "name": "凤凰 · 财经",
+      "kind": "json_list",
       "config": {
-        "feedUrl": "https://www.latent.space/feed",
+        "url": "https://finance.ifeng.com/",
+        "mode": "html_window_var",
+        "windowVar": "allData",
+        "itemsPath": "globalData",
+        "titlePaths": [
+          "title"
+        ],
+        "publishedAtPath": "newsTime",
+        "urlTemplate": "{raw:url}",
+        "externalIdPath": "base62Id",
+        "denyUrlPrefixes": [
+          "https://finance.ifeng.com/c/special/"
+        ],
         "_aihot": {
           "initialBackfillLimit": 8
-        }
+        },
+        "sortByPublishedAt": true
       },
       "tier": "T2",
       "first_party": false,
-      "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 180,
-      "tags": [
-        "个人"
-      ],
+      "interval_minutes": 90,
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": true,
+      "tags": [
+        "媒体"
+      ]
+    },
+    {
+      "id": "media-36kr",
+      "name": "36氪 · 商业科技",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.36kr.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        },
+        "sortByPublishedAt": true
+      },
+      "tier": "T2",
+      "first_party": false,
+      "participation_mode": "editorial",
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
+      "tags": [
+        "媒体"
+      ]
+    },
+    {
+      "id": "media-techcrunch",
+      "name": "TechCrunch · 科技商业",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://techcrunch.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        },
+        "sortByPublishedAt": true
+      },
+      "tier": "T2",
+      "first_party": false,
+      "participation_mode": "editorial",
+      "interval_minutes": 90,
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": true,
+      "tags": [
+        "媒体"
+      ]
     }
   ]
 }

@@ -1,0 +1,86 @@
+{
+  "$comment": "公众号选题雷达首轮试跑。RSS 启用；网页列表在选择器和日期预览成功前保持停用。",
+  "sources": [
+    {
+      "id": "rss-eu-trade-news",
+      "name": "欧盟贸易与经济安全新闻",
+      "kind": "rss",
+      "config": { "feedUrl": "https://policy.trade.ec.europa.eu/node/2/rss_en", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "国际与产业政策"],
+      "site_fulltext": false, "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-eu-council-press",
+      "name": "欧盟理事会新闻稿",
+      "kind": "rss",
+      "config": { "feedUrl": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "国际与产业政策"],
+      "site_fulltext": false, "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-openai-news",
+      "name": "OpenAI News",
+      "kind": "rss",
+      "config": { "feedUrl": "https://openai.com/news/rss.xml", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1", "first_party": true, "owner_entity_id": "openai", "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "AI技术"],
+      "site_fulltext": false, "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-google-deepmind",
+      "name": "Google DeepMind",
+      "kind": "rss",
+      "config": { "feedUrl": "https://deepmind.google/blog/rss.xml", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1", "first_party": true, "owner_entity_id": "google", "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "AI技术"],
+      "site_fulltext": false, "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-nvidia-blog",
+      "name": "NVIDIA Blog",
+      "kind": "rss",
+      "config": { "feedUrl": "https://blogs.nvidia.com/feed/", "_aihot": { "initialBackfillLimit": 8 } },
+      "tier": "T1", "first_party": true, "owner_entity_id": "nvidia", "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "AI技术", "公司商业"],
+      "site_fulltext": false, "syndicate_fulltext": false
+    },
+    {
+      "id": "web-mofcom-press-pending",
+      "name": "商务部新闻发布（待验证）",
+      "kind": "web_list",
+      "config": { "url": "https://www.mofcom.gov.cn/xwfb/", "parseMode": "html" },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "国际与产业政策"],
+      "site_fulltext": false, "syndicate_fulltext": false, "enabled": false
+    },
+    {
+      "id": "web-nbs-data-pending",
+      "name": "国家统计局数据发布（待验证）",
+      "kind": "web_list",
+      "config": { "url": "https://www.stats.gov.cn/sj/zxfb/", "parseMode": "html" },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "消费产品", "公司商业"],
+      "site_fulltext": false, "syndicate_fulltext": false, "enabled": false
+    },
+    {
+      "id": "web-miit-operations-pending",
+      "name": "工信部运行监测协调局（待验证）",
+      "kind": "web_list",
+      "config": { "url": "https://wap.miit.gov.cn/jgsj/yxj/index.html", "parseMode": "html" },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "真实工作", "公司商业"],
+      "site_fulltext": false, "syndicate_fulltext": false, "enabled": false
+    },
+    {
+      "id": "web-bis-press-pending",
+      "name": "美国 BIS 新闻稿（待验证）",
+      "kind": "web_list",
+      "config": { "url": "https://www.bis.gov/news-updates/search?close_filters=1&content_type=press_release&sort_by=created&sort_order=DESC", "parseMode": "html" },
+      "tier": "T1", "first_party": true, "participation_mode": "editorial",
+      "interval_minutes": 120, "tags": ["官方", "国际与产业政策"],
+      "site_fulltext": false, "syndicate_fulltext": false, "enabled": false
+    }
+  ]
+}

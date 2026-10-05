@@ -216,7 +216,7 @@ export default function SourceDetail({ loaderData }: Route.ComponentProps) {
                   key: "t",
                   label: "标题",
                   render: (r) => (
-                    <Link to={`/admin/content/${r.id}`} className="line-clamp-2 min-w-[260px] text-ink hover:text-accent">{r.title_zh || r.title}</Link>
+                    <div className="min-w-[260px]"><Link to={`/admin/content/${r.id}`} className="line-clamp-2 text-ink hover:text-accent">{s.id.startsWith('media-') ? r.title : r.title_zh || r.title}</Link>{r.title_translation && <p className="mt-1 text-xs leading-6 text-ink-3">中文：{r.title_translation}</p>}</div>
                   ),
                 },
                 { key: "s", label: "状态", render: (r) => <span className="flex gap-1">{r.selected && <Badge tone="accent">精选</Badge>}{r.visibility && r.visibility !== "public" && <Badge tone="warn">{VISIBILITY_LABEL[r.visibility]}</Badge>}<Badge>{r.processing_state}</Badge></span> },

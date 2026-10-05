@@ -60,7 +60,7 @@ const DAY_MS = 86_400_000;
 /** A listing title that is no headline: a label that swallowed its summary, or a call to action. */
 const needsTitle = (title: string) => title.length > 100 || /^(read more|learn more|continue reading|more|阅读全文|阅读更多|查看详情|了解更多)$/i.test(title.trim());
 
-async function store(sourceId: string, candidates: Candidate[], backfill: string | null): Promise<{ created: number; revised: number }> {
+async function store(sourceId: string, candidates: Candidate[], backfill: string | null, process = true): Promise<{ created: number; revised: number }> {
   let created = 0;
   let revised = 0;
   for (const c of candidates) {
@@ -69,12 +69,12 @@ async function store(sourceId: string, candidates: Candidate[], backfill: string
     if (res.created) created += 1;
     if (res.revised) revised += 1;
     // Extraction first when the source wants full text and none came with the listing, else analysis.
-    if (res.created || res.revised) await queueProcessing(res.articleId);
+    if (process && (res.created || res.revised)) await queueProcessing(res.articleId);
   }
   return { created, revised };
 }
 
-export async function collectSource(sourceId: string, opts: { force?: boolean } = {}): Promise<CollectResult> {
+export async function collectSource(sourceId: string, opts: { force?: boolean; process?: boolean } = {}): Promise<CollectResult> {
   const source = await loadSource(sourceId);
   if (!source) return { sourceId, status: "skipped", found: 0, created: 0, revised: 0, error: "missing" };
   if (!source.enabled && !opts.force) return { sourceId, status: "skipped", found: 0, created: 0, revised: 0, error: "paused" };
@@ -181,7 +181,7 @@ export async function collectSource(sourceId: string, opts: { force?: boolean } 
       }
     }
 
-    ({ created, revised } = await store(sourceId, candidates, firstImport ? "first-import" : null));
+    ({ created, revised } = await store(sourceId, candidates, firstImport ? "first-import" : null, opts.process !== false));
 
     // A Jina listing round that was pending when this run started has been received by now.
     delete nextCursor.jinaListingRound;

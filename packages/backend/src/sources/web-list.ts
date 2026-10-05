@@ -28,6 +28,11 @@ function atOffset(y: string | number, mo: string | number, d: string | number, h
 export function parseLooseDate(value: string | null | undefined, utcOffset = "+08:00"): Date | null {
   if (!value) return null;
   const v = value.trim();
+  // Some publisher article URLs carry a compact calendar date.
+  if (/^\d{8}$/.test(v)) {
+    const date = atOffset(v.slice(0, 4), v.slice(4, 6), v.slice(6, 8), 0, 0, 0, '+00:00');
+    return date && date.toISOString().slice(0, 10).replaceAll('-', '') === v ? date : null;
+  }
   if (!v) return null;
   if (EXPLICIT_ZONE.test(v) || /^\d{4}-\d{2}-\d{2}$/.test(v)) {
     const direct = Date.parse(v);
@@ -323,12 +328,29 @@ async function fromMimoHome(html: string, base: string, source: SourceRow): Prom
   throw new FetchError("mimo_home: no Blog list in the homepage's chunks");
 }
 
+export async function fromPeopleDaily(html: string, base: string, source: SourceRow): Promise<Candidate[]> {
+  const $ = cheerio.load(html);
+  const pages = [...new Set($('a[href]').toArray().map(el => absolute($(el).attr('href'), base)).filter((url): url is string => !!url && /\/layout\/\d{6}\/\d{2}\/node_\d+\.html$/.test(url)))].slice(0, 3);
+  if (!pages.length) throw new FetchError('people_daily: current issue pages not found');
+  const candidates: Candidate[] = [];
+  for (const url of pages) {
+    const response = await guardedFetch(url, { timeoutMs: 15_000 });
+    if (response.status !== 200) throw new FetchError(`people_daily: page HTTP ${response.status}`);
+    const match = /\/layout\/(\d{4})(\d{2})\/(\d{2})\//.exec(url)!;
+    const publishedAt = parseLooseDate(`${match[1]}-${match[2]}-${match[3]}`, '+08:00');
+    const items = fromHtml(response.text(), response.url, { ...source, config: { ...source.config, itemSelector: 'a[href*="content_"]' } });
+    candidates.push(...items.map(item => ({ ...item, publishedAt })));
+  }
+  return [...new Map(candidates.map(item => [item.url, item])).values()];
+}
+
 export async function fetchWebList(source: SourceRow, opts: { preview?: boolean } = {}): Promise<Candidate[]> {
   const { text, viaJina, base, round } = await fetchListingText(source);
-  const mode = source.config.adapter === "mimo_home" ? "mimo_home" : source.config.parseMode ?? (viaJina ? "markdown" : "html");
+  const mode = source.config.adapter ?? source.config.parseMode ?? (viaJina ? "markdown" : "html");
   try {
     let out: Candidate[];
     if (mode === "mimo_home") out = await fromMimoHome(text, base, source);
+    else if (mode === "people_daily") out = await fromPeopleDaily(text, base, source);
     else if (mode === "markdown") out = fromMarkdown(text, base, source);
     else if (mode === "docusaurus_changelog") out = fromDocusaurusChangelog(text, base, source);
     else out = fromHtml(text, base, source);

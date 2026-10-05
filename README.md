@@ -1,3 +1,23 @@
+# 选题雷达 · 个人公众号版
+
+这是基于 [KKKKhazix/AIHOT](https://github.com/KKKKhazix/AIHOT) 的个人适配版。当前分支 `wechat-radar` 从原始下载版本 `3343fe2` 改造；`main` 保留上游代码，后续更新按需合并。原作者的 MIT 许可与署名保留。
+
+## 当前使用方式
+
+- 后台 `/admin` 是公众号选题工作台。“更新选题”只采集并去重入库，不调用 DeepSeek，不排入普通模型处理队列，也不做定时更新。
+- 当前助手在写作工作流中按需阅读材料、提供海外标题的中文说明、比对近期母稿，再提供最多5个待核候选。页面标题规则仅辅助浏览，不代表已经核验或可写。
+- 保留原文链接、日期、人工主线、五项评分、笔记、候选 Markdown 导出，以及人工记录 JSON 备份恢复。笔记存于当前浏览器；换浏览器前先备份。
+- 配置10家媒体，美联社默认暂停；其他信源可因访问限制、代理或网站结构变化失败，页面逐家报告。无需模型 API 密钥即可使用仅采集流程。
+- 历史模型结果仅供回查，不参与本轮推荐或事件归组。框架的其他模型功能仍保留在源码中，当前个人流程保持关闭。
+
+运行环境为 Node.js 24 与 PostgreSQL 17，安装及数据库准备见 [部署说明](docs/deploy.md)。复制 `.env.example` 为本机 `.env` 并生成独立密码、会话密钥；此版本默认 `COLLECT_ENABLED=false`、`MODEL_CALLS_ENABLED=false`，`RADAR_MANUAL_ENABLED=true` 仅允许显式手动采集。个人使用不启动常规 worker。
+
+需要代理时在本机配置 `EGRESS_PROXY_URL`。可选的 `WECHAT_WORKSPACE_PATH` 只读取本机编辑上下文；不调用外部模型，也不修改该工作区。没有编辑工作区仍可采集，但近期重复需由助手人工检查。公开版不附带个人稿件、暂停稿件清单、密钥、数据库、试跑材料或下载的运行环境。
+
+以下保留原项目介绍；其中自动模型、日报、定时任务属于框架原有功能，并非本个人版本的默认工作流。
+
+---
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">
