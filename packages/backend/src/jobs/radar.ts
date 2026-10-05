@@ -1,7 +1,7 @@
 import type { AdminRadarRun } from '@aihot/contracts/admin';
 import { sql } from '../db.ts';
 import { collectSource } from '../sources/collect.ts';
-import { radarSafeError } from '../admin/radar.ts';
+import { radarSafeError } from '../lib/radar-error.ts';
 import { loadWechatContext, type WechatContext } from '../editorial/wechat-context.ts';
 
 type Dependencies = { collect?: typeof collectSource; context?: () => Promise<WechatContext> };

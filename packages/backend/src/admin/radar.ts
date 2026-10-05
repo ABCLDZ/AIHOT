@@ -2,16 +2,11 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { AdminRadarRun, BeforeJson } from '@aihot/contracts/admin';
-import { REPO_ROOT, credential } from '../config.ts';
+import { REPO_ROOT } from '../config.ts';
+import { radarSafeError } from '../lib/radar-error.ts';
 import { sql } from '../db.ts';
 import { audit } from '../audit.ts';
 
-export function radarSafeError(error: unknown): string {
-  let text = error instanceof Error ? error.message : String(error);
-  const secret = credential('models','DEEPSEEK_API_KEY');
-  if (secret) text = text.replaceAll(secret,'[hidden]');
-  return text.slice(0,500);
-}
 async function expireStalledRuns() {
   await sql`UPDATE radar_update_runs SET state='failed',stage='更新中断，请重新更新',error='任务超过4分钟没有进度，已结束；已保存的材料和译文保留',finished_at=now(),updated_at=now()
     WHERE state IN ('pending','running') AND updated_at < now()-interval '4 minutes'`;
